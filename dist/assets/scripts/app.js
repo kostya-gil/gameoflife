@@ -102,8 +102,8 @@
 	/**
 	 * Константы, определяющие изначальное количество клеток на поле
 	 */
-	var MAX_X = 10;
-	var MAX_Y = 10;
+	var MAX_X = 20;
+	var MAX_Y = 20;
 
 	/**
 	 * Константа для резмера клетки
@@ -129,8 +129,8 @@
 			_classCallCheck(this, Draw);
 
 			this.board = new _board2.default();
-			this.cells = null;
 
+			this.cells = null;
 			this.idInterval = null;
 
 			this.element = document.getElementById(element);
@@ -147,11 +147,16 @@
 		}
 
 		_createClass(Draw, [{
+			key: 'clear',
+			value: function clear() {
+				clearInterval(this.idInterval);
+				this.canvas.clearRect(0, 0, 800, 800);
+				this.cells = null;
+			}
+		}, {
 			key: 'initialization',
 			value: function initialization() {
-				clearInterval(this.idInterval);
-				this.canvas.clearRect(0, 0, 400, 400);
-				this.cells = null;
+				this.clear();
 				for (var y = 0; y <= MAX_Y; y++) {
 					for (var x = 0; x <= MAX_X; x++) {
 						this.board.addCell(new _cell2.default(x, y, Math.floor(Math.random() * (1 - 0 + 1)) + 0));
@@ -218,6 +223,7 @@
 			value: function tick() {
 				var _this4 = this;
 
+				this.clear();
 				this.render();
 				this.idInterval = setInterval(function () {
 					_this4.board.nextStep();
@@ -227,9 +233,7 @@
 		}, {
 			key: 'stopTick',
 			value: function stopTick() {
-				clearInterval(this.idInterval);
-				this.canvas.clearRect(0, 0, 400, 400);
-				this.cells = null;
+				this.clear();
 				this.render();
 			}
 		}]);

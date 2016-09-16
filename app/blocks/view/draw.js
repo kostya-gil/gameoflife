@@ -3,8 +3,8 @@ import Board from '../model/board';
 /**
  * Константы, определяющие изначальное количество клеток на поле
  */
-const MAX_X = 10;
-const MAX_Y = 10;
+const MAX_X = 20;
+const MAX_Y = 20;
 
 /**
  * Константа для резмера клетки
@@ -26,8 +26,8 @@ export default class Draw {
 	
 	constructor(element) {
 		this.board = new Board();
-		this.cells = null;
 		
+		this.cells = null;
 		this.idInterval = null;
 		
 		this.element = document.getElementById(element);
@@ -42,11 +42,15 @@ export default class Draw {
 			this.render();
 		});
 	}
+	
+	clear() {
+		clearInterval(this.idInterval);
+		this.canvas.clearRect(0, 0, 800, 800);
+		this.cells = null;
+	}
 
 	initialization() {
-		clearInterval(this.idInterval);
-		this.canvas.clearRect(0, 0, 400, 400);
-		this.cells = null;
+		this.clear();
 		for(let y = 0; y <= MAX_Y; y++) {
 			for(let x = 0; x <= MAX_X; x++) {
 				this.board.addCell(new Cell(x, y, Math.floor(Math.random() * (1 - 0 + 1)) + 0));
@@ -104,6 +108,7 @@ export default class Draw {
 	}
 				
 	tick() {
+		this.clear();
 		this.render();
 		this.idInterval = setInterval(() => {
 			this.board.nextStep();
@@ -112,9 +117,7 @@ export default class Draw {
 	}
 	
 	stopTick() {
-		clearInterval(this.idInterval);
-		this.canvas.clearRect(0, 0, 400, 400);
-		this.cells = null;
+		this.clear();
 		this.render();
 	}
 }
