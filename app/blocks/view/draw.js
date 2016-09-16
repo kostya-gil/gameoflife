@@ -55,7 +55,6 @@ export default class Draw {
 	}
 	
 	onClickCell(x, y) {
-		this.cells = [];
 		this.cells.forEach((item, i, arr) => {
 			if (y > item.top && y < item.top + item.size && x > item.left && x < item.left + item.size) {
 				let cell = this.board.getCellAt(item.left/SIZE_CELL, item.top/SIZE_CELL);
@@ -78,7 +77,6 @@ export default class Draw {
 				}
 			}
 		});
-		this.cells = null;
 	}
 	
 	render() {
@@ -103,7 +101,6 @@ export default class Draw {
 			this.canvas.strokeStyle = 'black';
 			this.canvas.stroke();
 		});
-		this.cells = null;
 	}
 				
 	tick() {

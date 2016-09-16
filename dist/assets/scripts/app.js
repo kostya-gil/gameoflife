@@ -163,7 +163,6 @@
 			value: function onClickCell(x, y) {
 				var _this2 = this;
 
-				this.cells = [];
 				this.cells.forEach(function (item, i, arr) {
 					if (y > item.top && y < item.top + item.size && x > item.left && x < item.left + item.size) {
 						var cell = _this2.board.getCellAt(item.left / SIZE_CELL, item.top / SIZE_CELL);
@@ -186,7 +185,6 @@
 						}
 					}
 				});
-				this.cells = null;
 			}
 		}, {
 			key: 'render',
@@ -214,7 +212,6 @@
 					_this3.canvas.strokeStyle = 'black';
 					_this3.canvas.stroke();
 				});
-				this.cells = null;
 			}
 		}, {
 			key: 'tick',
