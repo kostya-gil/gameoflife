@@ -64,7 +64,6 @@
 
 		btnInit.addEventListener('click', function () {
 			draw.initialization();
-			draw.render();
 			draw.tick();
 		});
 
@@ -103,8 +102,8 @@
 	/**
 	 * Константы, определяющие изначальное количество клеток на поле
 	 */
-	var MAX_X = 40;
-	var MAX_Y = 40;
+	var MAX_X = 10;
+	var MAX_Y = 10;
 
 	/**
 	 * Константа для резмера клетки
@@ -130,7 +129,7 @@
 			_classCallCheck(this, Draw);
 
 			this.board = new _board2.default();
-			this.cells = [];
+			this.cells = null;
 
 			this.idInterval = null;
 
@@ -150,6 +149,9 @@
 		_createClass(Draw, [{
 			key: 'initialization',
 			value: function initialization() {
+				clearInterval(this.idInterval);
+				this.canvas.clearRect(0, 0, 400, 400);
+				this.cells = null;
 				for (var y = 0; y <= MAX_Y; y++) {
 					for (var x = 0; x <= MAX_X; x++) {
 						this.board.addCell(new _cell2.default(x, y, Math.floor(Math.random() * (1 - 0 + 1)) + 0));
@@ -161,6 +163,7 @@
 			value: function onClickCell(x, y) {
 				var _this2 = this;
 
+				this.cells = [];
 				this.cells.forEach(function (item, i, arr) {
 					if (y > item.top && y < item.top + item.size && x > item.left && x < item.left + item.size) {
 						var cell = _this2.board.getCellAt(item.left / SIZE_CELL, item.top / SIZE_CELL);
@@ -183,12 +186,14 @@
 						}
 					}
 				});
+				this.cells = null;
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var _this3 = this;
 
+				this.cells = [];
 				for (var y = 0; y <= MAX_Y; y++) {
 					for (var x = 0; x <= MAX_X; x++) {
 						var cell = this.board.getCellAt(x, y);
@@ -200,7 +205,6 @@
 						});
 					}
 				}
-
 				this.cells.forEach(function (item) {
 					_this3.canvas.beginPath();
 					_this3.canvas.rect(item.left, item.top, item.size, item.size);
@@ -210,21 +214,26 @@
 					_this3.canvas.strokeStyle = 'black';
 					_this3.canvas.stroke();
 				});
+				this.cells = null;
 			}
 		}, {
 			key: 'tick',
 			value: function tick() {
 				var _this4 = this;
 
+				this.render();
 				this.idInterval = setInterval(function () {
 					_this4.board.nextStep();
 					_this4.render();
-				}, 1000);
+				}, 100);
 			}
 		}, {
 			key: 'stopTick',
 			value: function stopTick() {
 				clearInterval(this.idInterval);
+				this.canvas.clearRect(0, 0, 400, 400);
+				this.cells = null;
+				this.render();
 			}
 		}]);
 

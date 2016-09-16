@@ -12,7 +12,6 @@ import Draw from '../blocks/view/draw';
 	
 	btnInit.addEventListener('click', function() {
 		draw.initialization();
-		draw.render();
 		draw.tick();
 	});
 	

@@ -3,8 +3,8 @@ import Board from '../model/board';
 /**
  * Константы, определяющие изначальное количество клеток на поле
  */
-const MAX_X = 40;
-const MAX_Y = 40;
+const MAX_X = 10;
+const MAX_Y = 10;
 
 /**
  * Константа для резмера клетки
@@ -26,7 +26,7 @@ export default class Draw {
 	
 	constructor(element) {
 		this.board = new Board();
-		this.cells = [];
+		this.cells = null;
 		
 		this.idInterval = null;
 		
@@ -44,6 +44,9 @@ export default class Draw {
 	}
 
 	initialization() {
+		clearInterval(this.idInterval);
+		this.canvas.clearRect(0, 0, 400, 400);
+		this.cells = null;
 		for(let y = 0; y <= MAX_Y; y++) {
 			for(let x = 0; x <= MAX_X; x++) {
 				this.board.addCell(new Cell(x, y, Math.floor(Math.random() * (1 - 0 + 1)) + 0));
@@ -52,6 +55,7 @@ export default class Draw {
 	}
 	
 	onClickCell(x, y) {
+		this.cells = [];
 		this.cells.forEach((item, i, arr) => {
 			if (y > item.top && y < item.top + item.size && x > item.left && x < item.left + item.size) {
 				let cell = this.board.getCellAt(item.left/SIZE_CELL, item.top/SIZE_CELL);
@@ -74,9 +78,11 @@ export default class Draw {
 				}
 			}
 		});
+		this.cells = null;
 	}
 	
 	render() {
+		this.cells = [];
 		for(let y = 0; y <= MAX_Y; y++) {
 			for(let x = 0; x <= MAX_X; x++) {
 				let cell = this.board.getCellAt(x, y);
@@ -88,7 +94,6 @@ export default class Draw {
 				});
 			}
 		}
-		
 		this.cells.forEach((item) => {
 			this.canvas.beginPath();
 			this.canvas.rect(item.left, item.top, item.size,item.size);
@@ -98,16 +103,21 @@ export default class Draw {
 			this.canvas.strokeStyle = 'black';
 			this.canvas.stroke();
 		});
+		this.cells = null;
 	}
 				
 	tick() {
+		this.render();
 		this.idInterval = setInterval(() => {
 			this.board.nextStep();
 			this.render();
-		}, 1000);
+		}, 100);
 	}
 	
 	stopTick() {
 		clearInterval(this.idInterval);
+		this.canvas.clearRect(0, 0, 400, 400);
+		this.cells = null;
+		this.render();
 	}
 }
