@@ -62,7 +62,7 @@ export default class Draw {
 		this.cells.forEach((item, i, arr) => {
 			if (y > item.top && y < item.top + item.size && x > item.left && x < item.left + item.size) {
 				let cell = this.board.getCellAt(item.left/SIZE_CELL, item.top/SIZE_CELL);
-				if(item.color == ALIVE_CELL_COLOR) {
+				if(item.color === ALIVE_CELL_COLOR) {
 					arr.splice(i, 1, {
 						color: DEATH_CELL_COLOR,
 						left: item.left,

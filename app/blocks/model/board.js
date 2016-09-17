@@ -32,7 +32,7 @@ export default class Board {
  
 		for (let i = -1; i < 2; i++) {
 			for(let j = -1; j < 2; j++) {
-				if(i === 0 && i == j) {
+				if(i === 0 && i === j) {
 					continue;
 				}
 				let currentCell = this.getCellAt(x + i, y + j);
@@ -49,13 +49,13 @@ export default class Board {
 		let livingNeighbors = this.getAliveNeighbors(cell);
  
 		if(cell.state) {
-			if(livingNeighbors == 2 || livingNeighbors == 3) {
+			if(livingNeighbors === 2 || livingNeighbors === 3) {
 				tempCell.state = 1;
 			} else {
 				tempCell.state = 0;
 			}
 		} else {
-			if(livingNeighbors == 3) {
+			if(livingNeighbors === 3) {
 				tempCell.state = 1;
 			}
 		}

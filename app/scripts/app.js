@@ -12,7 +12,7 @@ import Draw from '../blocks/view/draw';
 	
 	btnInit.addEventListener('click', function() {
 		draw.initialization();
-		draw.tick();
+		draw.render();
 	});
 	
 	btnStart.addEventListener('click', function() {

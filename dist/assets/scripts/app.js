@@ -64,7 +64,7 @@
 
 		btnInit.addEventListener('click', function () {
 			draw.initialization();
-			draw.tick();
+			draw.render();
 		});
 
 		btnStart.addEventListener('click', function () {
@@ -171,7 +171,7 @@
 				this.cells.forEach(function (item, i, arr) {
 					if (y > item.top && y < item.top + item.size && x > item.left && x < item.left + item.size) {
 						var cell = _this2.board.getCellAt(item.left / SIZE_CELL, item.top / SIZE_CELL);
-						if (item.color == ALIVE_CELL_COLOR) {
+						if (item.color === ALIVE_CELL_COLOR) {
 							arr.splice(i, 1, {
 								color: DEATH_CELL_COLOR,
 								left: item.left,
@@ -347,7 +347,7 @@
 
 				for (var i = -1; i < 2; i++) {
 					for (var j = -1; j < 2; j++) {
-						if (i === 0 && i == j) {
+						if (i === 0 && i === j) {
 							continue;
 						}
 						var currentCell = this.getCellAt(x + i, y + j);
@@ -365,13 +365,13 @@
 				var livingNeighbors = this.getAliveNeighbors(cell);
 
 				if (cell.state) {
-					if (livingNeighbors == 2 || livingNeighbors == 3) {
+					if (livingNeighbors === 2 || livingNeighbors === 3) {
 						tempCell.state = 1;
 					} else {
 						tempCell.state = 0;
 					}
 				} else {
-					if (livingNeighbors == 3) {
+					if (livingNeighbors === 3) {
 						tempCell.state = 1;
 					}
 				}
