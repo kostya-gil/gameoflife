@@ -3,8 +3,8 @@ import Board from '../model/board';
 /**
  * Константы, определяющие изначальное количество клеток на поле
  */
-const MAX_X = 20;
-const MAX_Y = 20;
+const MAX_X = 39;
+const MAX_Y = 39;
 
 /**
  * Константа для резмера клетки
@@ -49,11 +49,16 @@ export default class Draw {
 		this.cells = null;
 	}
 
-	initialization() {
+	initialization(cells) {
 		this.clear();
 		for(let y = 0; y <= MAX_Y; y++) {
 			for(let x = 0; x <= MAX_X; x++) {
-				this.board.addCell(new Cell(x, y, Math.floor(Math.random() * (1 - 0 + 1)) + 0));
+				this.board.addCell(new Cell(x, y, 0));
+			}
+			if(cells) {
+				cells.forEach((item) =>{
+					this.board.addCell(new Cell(item.x, item.y, item.state));
+				});
 			}
 		}
 	}

@@ -46,34 +46,16 @@
 
 	'use strict';
 
-	var _draw = __webpack_require__(1);
+	var _handler = __webpack_require__(4);
 
-	var _draw2 = _interopRequireDefault(_draw);
+	var _handler2 = _interopRequireDefault(_handler);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	(function (global) {
-		var btnStop = document.getElementById('stop');
-		var btnStart = document.getElementById('start');
-		var btnInit = document.getElementById('init');
-
-		var draw = new _draw2.default('temp');
-
-		draw.initialization();
-		draw.render();
-
-		btnInit.addEventListener('click', function () {
-			draw.initialization();
-			draw.render();
-		});
-
-		btnStart.addEventListener('click', function () {
-			draw.tick();
-		});
-		btnStop.addEventListener('click', function () {
-			draw.stopTick();
-		});
-	})(undefined);
+	(function () {
+		var handler = new _handler2.default();
+		handler.start();
+	})();
 
 /***/ },
 /* 1 */
@@ -87,11 +69,11 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _cell = __webpack_require__(2);
+	var _cell = __webpack_require__(3);
 
 	var _cell2 = _interopRequireDefault(_cell);
 
-	var _board = __webpack_require__(3);
+	var _board = __webpack_require__(2);
 
 	var _board2 = _interopRequireDefault(_board);
 
@@ -102,8 +84,8 @@
 	/**
 	 * Константы, определяющие изначальное количество клеток на поле
 	 */
-	var MAX_X = 20;
-	var MAX_Y = 20;
+	var MAX_X = 39;
+	var MAX_Y = 39;
 
 	/**
 	 * Константа для резмера клетки
@@ -155,22 +137,29 @@
 			}
 		}, {
 			key: 'initialization',
-			value: function initialization() {
+			value: function initialization(cells) {
+				var _this2 = this;
+
 				this.clear();
 				for (var y = 0; y <= MAX_Y; y++) {
 					for (var x = 0; x <= MAX_X; x++) {
-						this.board.addCell(new _cell2.default(x, y, Math.floor(Math.random() * (1 - 0 + 1)) + 0));
+						this.board.addCell(new _cell2.default(x, y, 0));
+					}
+					if (cells) {
+						cells.forEach(function (item) {
+							_this2.board.addCell(new _cell2.default(item.x, item.y, item.state));
+						});
 					}
 				}
 			}
 		}, {
 			key: 'onClickCell',
 			value: function onClickCell(x, y) {
-				var _this2 = this;
+				var _this3 = this;
 
 				this.cells.forEach(function (item, i, arr) {
 					if (y > item.top && y < item.top + item.size && x > item.left && x < item.left + item.size) {
-						var cell = _this2.board.getCellAt(item.left / SIZE_CELL, item.top / SIZE_CELL);
+						var cell = _this3.board.getCellAt(item.left / SIZE_CELL, item.top / SIZE_CELL);
 						if (item.color === ALIVE_CELL_COLOR) {
 							arr.splice(i, 1, {
 								color: DEATH_CELL_COLOR,
@@ -194,7 +183,7 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this3 = this;
+				var _this4 = this;
 
 				this.cells = [];
 				for (var y = 0; y <= MAX_Y; y++) {
@@ -209,25 +198,25 @@
 					}
 				}
 				this.cells.forEach(function (item) {
-					_this3.canvas.beginPath();
-					_this3.canvas.rect(item.left, item.top, item.size, item.size);
-					_this3.canvas.fillStyle = item.color;
-					_this3.canvas.fill();
-					_this3.canvas.lineWidth = 3;
-					_this3.canvas.strokeStyle = 'black';
-					_this3.canvas.stroke();
+					_this4.canvas.beginPath();
+					_this4.canvas.rect(item.left, item.top, item.size, item.size);
+					_this4.canvas.fillStyle = item.color;
+					_this4.canvas.fill();
+					_this4.canvas.lineWidth = 3;
+					_this4.canvas.strokeStyle = 'black';
+					_this4.canvas.stroke();
 				});
 			}
 		}, {
 			key: 'tick',
 			value: function tick() {
-				var _this4 = this;
+				var _this5 = this;
 
 				this.clear();
 				this.render();
 				this.idInterval = setInterval(function () {
-					_this4.board.nextStep();
-					_this4.render();
+					_this5.board.nextStep();
+					_this5.render();
 				}, 100);
 			}
 		}, {
@@ -246,49 +235,6 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * Класс клетки
-	 * @class Cell
-	 * @param {Number} x
-	 * @param {Number} y
-	 * @param {Number} state (1 - живая, 0 - мертвая)
-	 */
-	var Cell = function () {
-		function Cell(x, y, state) {
-			_classCallCheck(this, Cell);
-
-			this.x = x;
-			this.y = y;
-			this.state = state;
-		}
-
-		_createClass(Cell, [{
-			key: "isAlive",
-			value: function isAlive() {
-				return !!this.state;
-			}
-		}]);
-
-		return Cell;
-	}();
-
-	exports.default = Cell;
-	module.exports = exports['default'];
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -299,7 +245,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _cell = __webpack_require__(2);
+	var _cell = __webpack_require__(3);
 
 	var _cell2 = _interopRequireDefault(_cell);
 
@@ -398,6 +344,320 @@
 
 	exports.default = Board;
 	module.exports = exports['default'];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Класс клетки
+	 * @class Cell
+	 * @param {Number} x
+	 * @param {Number} y
+	 * @param {Number} state (1 - живая, 0 - мертвая)
+	 */
+	var Cell = function () {
+		function Cell(x, y, state) {
+			_classCallCheck(this, Cell);
+
+			this.x = x;
+			this.y = y;
+			this.state = state;
+		}
+
+		_createClass(Cell, [{
+			key: "isAlive",
+			value: function isAlive() {
+				return !!this.state;
+			}
+		}]);
+
+		return Cell;
+	}();
+
+	exports.default = Cell;
+	module.exports = exports['default'];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _draw = __webpack_require__(1);
+
+	var _draw2 = _interopRequireDefault(_draw);
+
+	var _templatesCells = __webpack_require__(5);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Обьект, содержащий фигуры
+	 */
+	var colonies = {
+		glider: _templatesCells.glider,
+		glidergun: _templatesCells.gliderGun
+	};
+
+	/**
+	 * Кнопки интерактива
+	 */
+	var btnStop = document.getElementById('stop');
+	var btnStart = document.getElementById('start');
+	var btnInit = document.getElementById('init');
+	var containerColonies = document.getElementById('colonies');
+
+	/**
+	 * Класс интерактива
+	 * @class Board
+	 */
+
+	var Handler = function () {
+		function Handler() {
+			_classCallCheck(this, Handler);
+
+			this.draw = new _draw2.default('temp');
+			this.draw.initialization();
+			this.draw.render();
+		}
+
+		_createClass(Handler, [{
+			key: 'start',
+			value: function start() {
+				var _this = this;
+
+				btnInit.addEventListener('click', function (e) {
+					e.preventDefault();
+					_this.draw.initialization();
+					_this.draw.render();
+				});
+				btnStart.addEventListener('click', function (e) {
+					e.preventDefault();
+					_this.draw.tick();
+				});
+				btnStop.addEventListener('click', function (e) {
+					e.preventDefault();
+					_this.draw.stopTick();
+				});
+				containerColonies.addEventListener('click', function (e) {
+					e.preventDefault();
+					var target = e.target;
+
+					if (target.tagName != 'A') return;
+					var name = target.getAttribute('data-name');
+
+					if (name) {
+						_this.draw.initialization(colonies[name]);
+					}
+					_this.draw.render();
+				});
+			}
+		}]);
+
+		return Handler;
+	}();
+
+	exports.default = Handler;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	/**
+	 * Константы, задающие фигуры
+	 */
+	var gliderGun = exports.gliderGun = [{
+		x: 1,
+		y: 8,
+		state: 1
+	}, {
+		x: 1,
+		y: 9,
+		state: 1
+	}, {
+		x: 2,
+		y: 8,
+		state: 1
+	}, {
+		x: 2,
+		y: 9,
+		state: 1
+	}, {
+		x: 35,
+		y: 7,
+		state: 1
+	}, {
+		x: 35,
+		y: 8,
+		state: 1
+	}, {
+		x: 36,
+		y: 7,
+		state: 1
+	}, {
+		x: 36,
+		y: 8,
+		state: 1
+	}, {
+		x: 11,
+		y: 8,
+		state: 1
+	}, {
+		x: 11,
+		y: 9,
+		state: 1
+	}, {
+		x: 11,
+		y: 10,
+		state: 1
+	}, {
+		x: 12,
+		y: 7,
+		state: 1
+	}, {
+		x: 12,
+		y: 11,
+		state: 1
+	}, {
+		x: 13,
+		y: 6,
+		state: 1
+	}, {
+		x: 13,
+		y: 12,
+		state: 1
+	}, {
+		x: 14,
+		y: 6,
+		state: 1
+	}, {
+		x: 14,
+		y: 12,
+		state: 1
+	}, {
+		x: 15,
+		y: 9,
+		state: 1
+	}, {
+		x: 16,
+		y: 7,
+		state: 1
+	}, {
+		x: 16,
+		y: 11,
+		state: 1
+	}, {
+		x: 17,
+		y: 8,
+		state: 1
+	}, {
+		x: 17,
+		y: 9,
+		state: 1
+	}, {
+		x: 17,
+		y: 10,
+		state: 1
+	}, {
+		x: 18,
+		y: 9,
+		state: 1
+	}, {
+		x: 21,
+		y: 6,
+		state: 1
+	}, {
+		x: 21,
+		y: 7,
+		state: 1
+	}, {
+		x: 21,
+		y: 8,
+		state: 1
+	}, {
+		x: 22,
+		y: 6,
+		state: 1
+	}, {
+		x: 22,
+		y: 7,
+		state: 1
+	}, {
+		x: 22,
+		y: 8,
+		state: 1
+	}, {
+		x: 23,
+		y: 5,
+		state: 1
+	}, {
+		x: 23,
+		y: 9,
+		state: 1
+	}, {
+		x: 25,
+		y: 4,
+		state: 1
+	}, {
+		x: 25,
+		y: 5,
+		state: 1
+	}, {
+		x: 25,
+		y: 9,
+		state: 1
+	}, {
+		x: 25,
+		y: 10,
+		state: 1
+	}];
+
+	var glider = exports.glider = [{
+		x: 3,
+		y: 2,
+		state: 1
+	}, {
+		x: 4,
+		y: 3,
+		state: 1
+	}, {
+		x: 4,
+		y: 4,
+		state: 1
+	}, {
+		x: 3,
+		y: 4,
+		state: 1
+	}, {
+		x: 2,
+		y: 4,
+		state: 1
+	}];
 
 /***/ }
 /******/ ]);

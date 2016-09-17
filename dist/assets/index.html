@@ -1,22 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<style>
-		canvas {
-			display: block;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-		}
-	</style>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Игра "Жизнь"</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="css/theme.css" rel="stylesheet">
 </head>
 <body>
-	<canvas id="temp" width="500px" height="500px"></canvas>
-	<button id="init">Начать заново(рандом)</button>
-	<button id="start">Запуск</button>
-	<button id="stop">Пауза</button>
+	<!-- Fixed navbar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" style="padding: 20px 15px" href="">Игра "Жизнь"</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="">
+            	<button class="btn btn-primary" id="init">СБРОС</button>
+            </a></li>
+            <li><a href="">
+            	<button class="btn btn-success" id="start">ПУСК</button>
+            </a></li>
+            <li><a href="">
+            	<button class="btn btn-danger" id="stop">ПАУЗА</button>
+            </a></li>
+            <li class="dropdown">
+              <a href="#" style="margin-top: 7px;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Начальные колонии <span class="caret"></span></a>
+              <ul class="dropdown-menu" id="colonies">
+                <li><a href="" data-name="glider">Глидер</a></li>
+                <li><a href="" data-name="glidergun">Планерное ружьё Госпера</a></li>
+              </ul>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+   </nav>
+	<canvas id="temp" width="1010px" height="1010px"></canvas>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+	<script src="scripts/app.js"></script>
 </body>
-<script src="scripts/app.js"></script>
 </html>
