@@ -7,6 +7,12 @@ const MAX_X = 39;
 const MAX_Y = 39;
 
 /**
+ * Отступы, чтобы корректно определялись координаты.
+ */
+const PADDING_LEFT = 25;
+const PADDING_TOP = 22;
+
+/**
  * Константа для резмера клетки
  */
 const SIZE_CELL= 25;
@@ -36,14 +42,15 @@ export default class Draw {
 		this.element.addEventListener('click', (event) => {
 			this.stopTick();
 			
-			let x = event.pageX - this.element.offsetLeft,
-					y = event.pageY - this.element.offsetTop;
+			let x = event.pageX - (this.element.offsetLeft + PADDING_LEFT),
+					y = event.pageY - (this.element.offsetTop + PADDING_TOP);
 			this.onClickCell(x, y);
 			this.render();
 		});
 	}
 	
 	clear() {
+		this.element.style.backgroundColor = '#d08282';
 		clearInterval(this.idInterval);
 		this.canvas.clearRect(0, 0, 800, 800);
 		this.cells = null;
@@ -114,6 +121,7 @@ export default class Draw {
 				
 	tick() {
 		this.clear();
+		this.element.style.backgroundColor = '#8ead65';
 		this.render();
 		this.idInterval = setInterval(() => {
 			this.board.nextStep();

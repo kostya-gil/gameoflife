@@ -88,6 +88,12 @@
 	var MAX_Y = 39;
 
 	/**
+	 * Отступы, чтобы корректно определялись координаты.
+	 */
+	var PADDING_LEFT = 25;
+	var PADDING_TOP = 22;
+
+	/**
 	 * Константа для резмера клетки
 	 */
 	var SIZE_CELL = 25;
@@ -121,8 +127,8 @@
 			this.element.addEventListener('click', function (event) {
 				_this.stopTick();
 
-				var x = event.pageX - _this.element.offsetLeft,
-				    y = event.pageY - _this.element.offsetTop;
+				var x = event.pageX - (_this.element.offsetLeft + PADDING_LEFT),
+				    y = event.pageY - (_this.element.offsetTop + PADDING_TOP);
 				_this.onClickCell(x, y);
 				_this.render();
 			});
@@ -131,6 +137,7 @@
 		_createClass(Draw, [{
 			key: 'clear',
 			value: function clear() {
+				this.element.style.backgroundColor = '#d08282';
 				clearInterval(this.idInterval);
 				this.canvas.clearRect(0, 0, 800, 800);
 				this.cells = null;
@@ -213,6 +220,7 @@
 				var _this5 = this;
 
 				this.clear();
+				this.element.style.backgroundColor = '#8ead65';
 				this.render();
 				this.idInterval = setInterval(function () {
 					_this5.board.nextStep();

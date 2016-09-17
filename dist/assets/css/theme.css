@@ -5,6 +5,7 @@ body {
 canvas {
 	display: block;
 	margin: 0 auto;
+	padding: 22px 15px 15px 25px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
